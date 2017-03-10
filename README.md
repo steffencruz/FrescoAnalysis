@@ -7,15 +7,15 @@ DWBA Analysis Companion
 
   
   
-  # Search Mode
+# Search Mode
 
 - Calculates SF for all possible neutron states and returns lowest chi2 fit
 
- # Scan Mode
+# Scan Mode
 
 - Calculates SF & Sig for all possible neutron states and produces a graphs of these values as a function of ExcHi and fits this to a cumulative function which indicates the best SF.
 
- # Description of variables
+# Description of variables
 
   REAC - "dp", "pp", "dd" selects the reaction
   ** neutron state information **  
