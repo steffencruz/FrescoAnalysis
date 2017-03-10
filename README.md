@@ -45,9 +45,9 @@ DWBA Analysis Companion
 
 # Notes
 
- Further work : -
- - Add (d,t) reaction
- - Copy files and make directories?
- - Speed up the process of doing calculations. Scripts.
+Further work : -
+- Add (d,t) reaction
+- Copy files and make directories?
+- Speed up the process of doing calculations. Scripts.
    
- Known bugs :-
+Known bugs :-
