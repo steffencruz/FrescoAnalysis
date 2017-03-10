@@ -5,15 +5,17 @@ DWBA Analysis Companion
 - Uses FRESCO template files and neutron state information to generate a DWBA calculation and fit it to data to extract experimental spectroscopic factors
 - Can also be used to generate elastic scattering files to normalize data to DWBA
 
-  _____SearchMode_____
+  
+  
+  # Search Mode
 
 - Calculates SF for all possible neutron states and returns lowest chi2 fit
 
-  _____ScanMode_____
+ # Scan Mode
 
 - Calculates SF & Sig for all possible neutron states and produces a graphs of these values as a function of ExcHi and fits this to a cumulative function which indicates the best SF.
 
-  ___Description of variables ___
+ # Description of variables
 
   REAC - "dp", "pp", "dd" selects the reaction
   ** neutron state information **  
@@ -37,7 +39,7 @@ DWBA Analysis Companion
  -> 3   =   Print everything
 
 
- ___Notes___
+# Notes
 
  Further work : -
    -> Add (d,t) reaction
