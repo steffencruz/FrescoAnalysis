@@ -1,0 +1,7 @@
+ '<FRESNAME>.frin' '<FRESNAME>.frout'
+<NFITPARS> <NFITDATA>
+
+<FITPARS>
+
+<FITDATA>
+

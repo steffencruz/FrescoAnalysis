@@ -1,0 +1,35 @@
+<BEAMA>Sr(<TARGA>H,<TARGA>H)<RECOA>Sr @ E = <EPERU> MeV/u 
+NAMELIST
+ &FRESCO 
+		 hcm=0.1 rmatch=30.0 
+		 hnl=0.1 rnl=3.2 centre=-0.1 nnu=36 jtmax=30
+		 thmin=1.00 thmax=180.00  
+		 iter=1 chans=1 xstabl=1
+		 elab=<ELAB> /		 
+
+ &PARTITION 
+		namep='<BEAMA>Sr' massp=<BMASS> zp=38
+		namet='<TARGA>H'  masst=<TMASS> zt=1 
+		qval=0.000 pwf=F nex=1  
+		/
+	 &STATES 
+			jp=<BSPIN> bandp=1 
+			jt=<TSPIN> bandt=1 
+			cpot = 1 fexch=F /
+ 
+ &partition /
+
+
+	&POT 	kp=1 ap=<BEAMA> rc=<KP1_0P0>  / INCOMING CHANNEL: <TARGA>H + <BEAMA>SR.. 
+	&POT 	kp=1 type=1 shape=0 p1=<KP1_1P1> p2=<KP1_1P2> p3=<KP1_1P3> p4=<KP1_1P4> p5=<KP1_1P5> p5=<KP1_1P6>   / REAL VOLUME [WS]
+	&POT 	kp=1 type=2 shape=0 p1=<KP1_2P1> p2=<KP1_2P2> p3=<KP1_2P3> p4=<KP1_2P4> p5=<KP1_2P5> p6=<KP1_2P6>   / IMAG SURFACE [WS]
+	&POT 	kp=1 type=3 shape=0 p1=<KP1_3P1> p2=<KP1_3P2> p3=<KP1_3P3> p4=<KP1_3P4> p5=<KP1_3P5> p6=<KP1_3P6>   / SPIN ORBIT [WS] 
+
+ &pot /
+
+ &overlap /
+
+ &coupling /
+
+
+

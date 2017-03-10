@@ -1,0 +1,12 @@
+sr95_dp0_L2j1.5J2.0_psr95_dsr95.search
+plot sr95_dp0_L2j1.5J2.0_psr95_dsr95-init.plot
+min
+scan
+migrad
+min
+end
+q
+show
+plot sr95_dp0_L2j1.5J2.0_psr95_dsr95-fit.plot
+exit
+

@@ -1,0 +1,244 @@
+SFRESCO - FRES 2.9: Search Coupled Reaction Channels
+
+ Please give search file name
+ SFresco search file = sr95_dp0_L0j0.5J0.0_psr95_dsr95.search            
+
+ Fresco input file = sr95_dp0_L0j0.5J0.0_psr95_dsr95.frin              
+   and output file = sr95_dp0_L0j0.5J0.0_psr95_dsr95.frout             
+ Search on  1 variables for   1 datasets,
+  MINUIT RELEASE 96.03  INITIALIZED.   DIMENSIONS 100/ 50  EPSMAC=  0.89E-15
+
+  Define SEARCH VARIABLES:
+
+   Variable  1=Spec. Ampl is Afrac #  1
+     value   1.0000           step  0.0100, min,max   0.0010 10.0000
+
+  Read definition of data set            1
+  Read DATA SET  1 from file =                                                 
+    of type  0  in mb    with absolute errors, CM  for state/excit  2  1,  idir= 0
+
+  Angular cross section T00
+  Read data set            1
+            32  data points:
+  Angle CM  Datum     Absolute error
+    3.000   1.178      0.1499    
+    5.000   1.558      0.1545    
+    7.000   1.336      0.1582    
+    9.000   1.269      0.1446    
+   11.000  0.6549      0.1042    
+   13.000  0.3418      0.4795E-01
+   17.000  0.1830      0.8811E-01
+   19.000  0.1626      0.6390E-01
+   21.000  0.2389      0.5628E-01
+   23.000  0.3840      0.5062E-01
+   25.000  0.3729      0.6106E-01
+   27.000  0.4993      0.5424E-01
+   29.000  0.4182      0.5075E-01
+   31.000  0.5246      0.4793E-01
+   33.000  0.4589      0.4446E-01
+   35.000  0.4201      0.3939E-01
+   37.000  0.3337      0.4057E-01
+   39.000  0.2620      0.3358E-01
+   41.000  0.2362      0.4487E-01
+   43.000  0.1417      0.2904E-01
+   45.000  0.1302      0.1636E-01
+   65.000  0.7812E-01  0.3834E-01
+   67.000  0.1450      0.3005E-01
+   69.000  0.1606      0.2778E-01
+   71.000  0.1089      0.2683E-01
+   73.000  0.1072      0.1909E-01
+   75.000  0.1287      0.2279E-01
+   77.000  0.1115      0.1994E-01
+   79.000  0.7501E-01  0.2027E-01
+   81.000  0.8297E-01  0.2024E-01
+   83.000  0.5715E-01  0.1434E-01
+   85.000  0.4688E-01  0.1408E-01
+
+  FRESCO output to sr95_dp0_L0j0.5J0.0_psr95_dsr95.frout*
+
+ Calculate scattering at energies
+  510.900
+
+
+  Total ChiSq/N =  2704.8696 from   2704.870
+ Note: variable   1=Spec. Ampl is overlap < [d        # 1] / [p        # 1]  * KN#  1>      
+
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 'Spec. Ampl'    1.0000      0.10000E-01    0.10000E-02   10.000    
+sfresco> 
+  ChiSq/N =  2704.870 from   2704.870
+  xmgr file written: sr95_dp0_L0j0.5J0.0_psr95_dsr95-init.plot         
+sfresco> 
+   Call MINUIT
+   with NOGradient, STRategy=0, ERRordef=  0.0312
+ **********
+ **    1 **SET NOGRADIENT 
+ **********
+ **********
+ **    2 **SET STRAT    0.000    
+ **********
+
+ NOW USING STRATEGY  0: MINIMIZE THE NUMBER OF CALLS TO FUNCTION
+
+ **********
+ **    3 **SET ERRORDEF  0.3125E-01
+ **********
+minuit>  **********
+ **    4 **SCAN 
+ **********
+
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+1SCAN OF PARAMETER NO.  1,  Spec. Ampl
+  0.3500000E+08 ........................................................
+                  .     .                                            * .
+  0.3300000E+08 ...     .                                              .
+                  .     .                                              .
+  0.3100000E+08 ...     .                                           *  .
+                  .     .                                              .
+  0.2900000E+08 ...     .                                              .
+                  .     .                                              .
+  0.2700000E+08 ...     .                                          *   .
+                  .     .                                              .
+  0.2500000E+08 ...     .                                         *    .
+                  .     .                                              .
+  0.2300000E+08 ...     .                                              .
+                  .     .                                        *     .
+  0.2100000E+08 ...     .                                              .
+                  .     .                                      *       .
+  0.1900000E+08 ...     .                                              .
+                  .     .                                              .
+  0.1700000E+08 ...     .                                     *        .
+                  .     .                                              .
+  0.1500000E+08 ...     .                                    *         .
+                  .     .                                   *          .
+  0.1300000E+08 ...     .                                              .
+                  .     .                                 *            .
+  0.1100000E+08 ...     .                                              .
+                  .     .                                *             .
+   9000000.     ...     .                               *              .
+                  .     .                              *               .
+   7000000.     ...     .                            *                 .
+                  .     .                           *                  .
+   5000000.     ...     .                          *                   .
+                  .     .                         *                    .
+   3000000.     ...     .                      **                      .
+                  .     .                    **                        .
+   1000000.     ...     .                ***                           .
+                  ..****&****.****.****.*...............................
+  -1000000.     ...     .                                              .
+  -2000000.     ........................................................
+                  /         /         /         /         /         /   
+            -.2000     1.800     3.800     5.800     7.800     9.800    
+                         ONE COLUMN=0.2000000       Overprint character is &   
+
+ FCN=   10.98488     FROM SCAn      STATUS=IMPROVED      42 CALLS       42 TOTAL
+                     EDM= unknown      STRATEGY= 0      NO ERROR MATRIX       
+
+  EXT PARAMETER               CURRENT GUESS      PHYSICAL LIMITS       
+  NO.   NAME        VALUE          ERROR       NEGATIVE      POSITIVE  
+   1  Spec. Ampl   0.25098       0.10000E-01   0.10000E-02    10.000    
+                               ERR DEF= 0.312E-01
+minuit>  **********
+ **    5 **MIGRAD 
+ **********
+ START MIGRAD MINIMIZATION.  STRATEGY 0.  CONVERGENCE WHEN EDM .LT. 0.31E-05
+
+ FCN=   10.98488     FROM MIGRAD    STATUS=INITIATE       2 CALLS       44 TOTAL
+                     EDM= unknown      STRATEGY= 0      NO ERROR MATRIX       
+
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.25098       0.10000E-01   0.33350E-02   -273.32    
+                               ERR DEF= 0.312E-01
+
+ MIGRAD MINIMIZATION HAS CONVERGED.
+
+ FCN=   2.144020     FROM MIGRAD    STATUS=CONVERGED     20 CALLS       62 TOTAL
+                     EDM=  0.14E-13  STRATEGY=0  ERROR MATRIX UNCERTAINTY= 24.4%
+
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.33716       0.44696E-02   0.91649E-05   0.10653E-04
+                               ERR DEF= 0.312E-01
+
+ EXTERNAL ERROR MATRIX.    NDIM=  50    NPAR=  1    ERR DEF= 0.312E-01
+  0.200E-04
+ ERR MATRIX APPROXIMATE
+minuit>  **********
+ **    6 **MIN 
+ **********
+ START MIGRAD MINIMIZATION.  STRATEGY 0.  CONVERGENCE WHEN EDM .LT. 0.31E-05
+
+ FCN=   2.144020     FROM MIGRAD    STATUS=INITIATE       2 CALLS       64 TOTAL
+                     EDM=  0.96E-14  STRATEGY=0  ERROR MATRIX UNCERTAINTY= 24.4%
+
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.33716       0.44696E-02   0.91649E-05   0.10592E-04
+                               ERR DEF= 0.312E-01
+ MIGRAD FAILS TO FIND IMPROVEMENT
+
+ MIGRAD MINIMIZATION HAS CONVERGED.
+
+ FCN=   2.144020     FROM MIGRAD    STATUS=CONVERGED      3 CALLS       65 TOTAL
+                     EDM=  0.96E-14  STRATEGY=0  ERROR MATRIX UNCERTAINTY= 24.4%
+
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.33716       0.44696E-02   -0.0000       0.10592E-04
+                               ERR DEF= 0.312E-01
+
+ EXTERNAL ERROR MATRIX.    NDIM=  50    NPAR=  1    ERR DEF= 0.312E-01
+  0.200E-04
+ ERR MATRIX APPROXIMATE
+minuit>  **********
+ **    7 **END 
+ **********
+
+ CALL TO USER FUNCTION WITH IFLAG = 3
+
+ END OF MINUIT COMMAND INPUT.    RETURN TO USER PROGRAM.
+
+sfresco>     Var   1=Spec. Ampl value     0.337165, step   0.0100, error   0.0045
+sfresco> 
+  Dataset            1  <=>
+    Angle   Datum      Abs. error  Theory         Chi
+    3.000  1.1779     0.14991      1.6462          9.7597
+    5.000  1.5581     0.15451      1.4484          0.5037
+    7.000  1.3357     0.15819      1.1893          0.8567
+    9.000  1.2686     0.14456     0.90557          6.3064
+   11.000 0.65489     0.10422     0.63472          0.0375
+   13.000 0.34176     0.47950E-01 0.40827          1.9236
+   17.000 0.18296     0.88105E-01 0.15950          0.0709
+   19.000 0.16257     0.63901E-01 0.14089          0.1151
+   21.000 0.23893     0.56280E-01 0.17708          1.2078
+   23.000 0.38399     0.50621E-01 0.24791          7.2267
+   25.000 0.37292     0.61064E-01 0.33157          0.4585
+   27.000 0.49928     0.54240E-01 0.40843          2.8052
+   29.000 0.41822     0.50750E-01 0.46371          0.8034
+   31.000 0.52464     0.47927E-01 0.48881          0.5589
+   33.000 0.45893     0.44464E-01 0.48146          0.2567
+   35.000 0.42011     0.39394E-01 0.44482          0.3935
+   37.000 0.33371     0.40573E-01 0.38601          1.6616
+   39.000 0.26202     0.33580E-01 0.31437          2.4306
+   41.000 0.23623     0.44866E-01 0.23974          0.0061
+   43.000 0.14174     0.29045E-01 0.17098          1.0131
+   45.000 0.13021     0.16356E-01 0.11488          0.8790
+   65.000 0.78123E-01 0.38345E-01 0.15160          3.6721
+   67.000 0.14502     0.30049E-01 0.14834          0.0122
+   69.000 0.16058     0.27784E-01 0.13874          0.6178
+   71.000 0.10892     0.26834E-01 0.12423          0.3256
+   73.000 0.10723     0.19086E-01 0.10655          0.0013
+   75.000 0.12871     0.22791E-01 0.87446E-01      3.2780
+   77.000 0.11154     0.19935E-01 0.68527E-01      4.6550
+   79.000 0.75011E-01 0.20268E-01 0.51118E-01      1.3896
+   81.000 0.82971E-01 0.20244E-01 0.36200E-01      5.3381
+   83.000 0.57150E-01 0.14336E-01 0.24389E-01      5.2223
+   85.000 0.46880E-01 0.14083E-01 0.15956E-01      4.8220
+
+  Total ChiSq/N =     2.1440 from      2.144
+sfresco> 
+  ChiSq/N =     2.144 from      2.144
+  xmgr file written: sr95_dp0_L0j0.5J0.0_psr95_dsr95-fit.plot          
+sfresco> 

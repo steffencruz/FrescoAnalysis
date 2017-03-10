@@ -1,0 +1,12 @@
+test.search
+plot test-init.plot
+min
+scan
+migrad
+min
+end
+q
+show
+plot test-fit.plot
+exit
+

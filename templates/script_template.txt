@@ -1,0 +1,12 @@
+<FRESNAME>.search
+plot <FRESNAME>-init.plot
+min
+scan
+migrad
+min
+end
+q
+show
+plot <FRESNAME>-fit.plot
+exit
+

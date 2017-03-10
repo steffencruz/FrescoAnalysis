@@ -1,0 +1,200 @@
+SFRESCO - FRES 2.9: Search Coupled Reaction Channels
+
+ Please give search file name
+ SFresco search file = sr94_dp680_L4j3.5J3.5_pfitR94_dfitR94.search      
+
+ Fresco input file = sr94_dp680_L4j3.5J3.5_pfitR94_dfitR94.frin        
+   and output file = sr94_dp680_L4j3.5J3.5_pfitR94_dfitR94.frout       
+ Search on  1 variables for   1 datasets,
+  MINUIT RELEASE 96.03  INITIALIZED.   DIMENSIONS 100/ 50  EPSMAC=  0.89E-15
+
+  Define SEARCH VARIABLES:
+
+   Variable  1=Spec. Ampl is Afrac #  1
+     value   1.0000           step  0.0100, min,max   0.0010 10.0000
+
+  Read definition of data set            1
+  Read DATA SET  1 from file =                                                 
+    of type  0  in mb    with absolute errors, CM  for state/excit  2  1,  idir= 0
+
+  Angular cross section T00
+  Read data set            1
+            14  data points:
+  Angle CM  Datum     Absolute error
+   12.500  0.3930      0.4864    
+   17.500   1.854      0.7376    
+   22.500   2.793      0.7487    
+   27.500   1.902      0.5510    
+   32.500   3.374      0.7039    
+   37.500  0.9899      0.3536    
+   42.500  0.5274      0.2762    
+   67.500  0.9419      0.3162    
+   72.500  0.4493      0.2055    
+   77.500  0.2218      0.1398    
+   82.500  0.1041      0.9259E-01
+   87.500  0.2745      0.1541    
+   97.500  0.1733      0.1238    
+  102.500  0.1294      0.1038    
+
+  FRESCO output to sr94_dp680_L4j3.5J3.5_pfitR94_dfitR94.frout*
+
+ Calculate scattering at energies
+  499.500
+
+
+  Total ChiSq/N =   279.4271 from    279.427
+ Note: variable   1=Spec. Ampl is overlap < [d        # 1] / [p        # 1]  * KN#  1>      
+
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 'Spec. Ampl'    1.0000      0.10000E-01    0.10000E-02   10.000    
+sfresco> 
+  ChiSq/N =   279.427 from    279.427
+  xmgr file written: sr94_dp680_L4j3.5J3.5_pfitR94_dfitR94-init.plot   
+sfresco> 
+   Call MINUIT
+   with NOGradient, STRategy=0, ERRordef=  0.0714
+ **********
+ **    1 **SET NOGRADIENT 
+ **********
+ **********
+ **    2 **SET STRAT    0.000    
+ **********
+
+ NOW USING STRATEGY  0: MINIMIZE THE NUMBER OF CALLS TO FUNCTION
+
+ **********
+ **    3 **SET ERRORDEF  0.7143E-01
+ **********
+minuit>  **********
+ **    4 **SCAN 
+ **********
+
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+1SCAN OF PARAMETER NO.  1,  Spec. Ampl
+   3400000.     ........................................................
+                  .     .                                            * .
+   3200000.     ...     .                                              .
+                  .     .                                              .
+   3000000.     ...     .                                              .
+                  .     .                                           *  .
+   2800000.     ...     .                                              .
+                  .     .                                              .
+   2600000.     ...     .                                          *   .
+                  .     .                                              .
+   2400000.     ...     .                                         *    .
+                  .     .                                              .
+   2200000.     ...     .                                              .
+                  .     .                                        *     .
+   2000000.     ...     .                                              .
+                  .     .                                      *       .
+   1800000.     ...     .                                              .
+                  .     .                                     *        .
+   1600000.     ...     .                                              .
+                  .     .                                    *         .
+   1400000.     ...     .                                              .
+                  .     .                                   *          .
+   1200000.     ...     .                                              .
+                  .     .                                 *            .
+   1000000.     ...     .                                *             .
+                  .     .                               *              .
+   800000.0     ...     .                                              .
+                  .     .                              *               .
+   600000.0     ...     .                            *                 .
+                  .     .                          **                  .
+   400000.0     ...     .                         *                    .
+                  .     .                      **                      .
+   200000.0     ...     .                    **                        .
+                  .     .                ***                           .
+   0.000000     ....****&****.****.****.*...............................
+                  .     .                                              .
+  -200000.0     ........................................................
+                  /         /         /         /         /         /   
+            -.2000     1.800     3.800     5.800     7.800     9.800    
+                         ONE COLUMN=0.2000000       Overprint character is &   
+
+ FCN=   4.168688     FROM SCAn      STATUS=IMPROVED      42 CALLS       42 TOTAL
+                     EDM= unknown      STRATEGY= 0      NO ERROR MATRIX       
+
+  EXT PARAMETER               CURRENT GUESS      PHYSICAL LIMITS       
+  NO.   NAME        VALUE          ERROR       NEGATIVE      POSITIVE  
+   1  Spec. Ampl   0.25098       0.10000E-01   0.10000E-02    10.000    
+                               ERR DEF= 0.714E-01
+minuit>  **********
+ **    5 **MIGRAD 
+ **********
+ START MIGRAD MINIMIZATION.  STRATEGY 0.  CONVERGENCE WHEN EDM .LT. 0.71E-05
+
+ FCN=   4.168688     FROM MIGRAD    STATUS=INITIATE       4 CALLS       46 TOTAL
+                     EDM= unknown      STRATEGY= 0      NO ERROR MATRIX       
+
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.25098       0.10000E-01   0.33350E-02   -13.000    
+                               ERR DEF= 0.714E-01
+
+ MIGRAD MINIMIZATION HAS CONVERGED.
+
+ FCN=   3.960930     FROM MIGRAD    STATUS=CONVERGED     14 CALLS       56 TOTAL
+                     EDM=  0.40E-09    STRATEGY= 0      NO ERROR MATRIX       
+
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.29671       0.10000E-01   0.11572E-02   0.35133E-03
+                               ERR DEF= 0.714E-01
+ NO ERROR MATRIX       
+minuit>  **********
+ **    6 **MIN 
+ **********
+ START MIGRAD MINIMIZATION.  STRATEGY 0.  CONVERGENCE WHEN EDM .LT. 0.71E-05
+
+ FCN=   3.960930     FROM MIGRAD    STATUS=INITIATE       2 CALLS       58 TOTAL
+                     EDM= unknown      STRATEGY= 0      NO ERROR MATRIX       
+
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.29671       0.10000E-01   0.11572E-02   0.31058E-03
+                               ERR DEF= 0.714E-01
+
+ MIGRAD MINIMIZATION HAS CONVERGED.
+
+ FCN=   3.960930     FROM MIGRAD    STATUS=CONVERGED     15 CALLS       71 TOTAL
+                     EDM=  0.14E-12    STRATEGY= 0      NO ERROR MATRIX       
+
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME        VALUE          ERROR          SIZE      DERIVATIVE 
+   1  Spec. Ampl   0.29670       0.10000E-01  -0.46926E-06   0.68520E-05
+                               ERR DEF= 0.714E-01
+ NO ERROR MATRIX       
+minuit>  **********
+ **    7 **END 
+ **********
+
+ CALL TO USER FUNCTION WITH IFLAG = 3
+
+ END OF MINUIT COMMAND INPUT.    RETURN TO USER PROGRAM.
+
+sfresco>     Var   1=Spec. Ampl value     0.296705, step   0.0100, error   0.0100
+sfresco> 
+  Dataset            1  <=>
+    Angle   Datum      Abs. error  Theory         Chi
+   12.500 0.39296     0.48644     0.27861          0.0553
+   17.500  1.8537     0.73757     0.23273          4.8301
+   22.500  2.7925     0.74869     0.21059         11.8927
+   27.500  1.9020     0.55097     0.22983          9.2110
+   32.500  3.3745     0.70392     0.29629         19.1225
+   37.500 0.98992     0.35357     0.39845          2.7984
+   42.500 0.52739     0.27620     0.50928          0.0043
+   67.500 0.94185     0.31617     0.46135          2.3096
+   72.500 0.44926     0.20546     0.38717          0.0913
+   77.500 0.22184     0.13978     0.33042          0.6034
+   82.500 0.10415     0.92590E-01 0.29017          4.0366
+   87.500 0.27454     0.15412     0.26045          0.0083
+   97.500 0.17328     0.12381     0.21397          0.1080
+  102.500 0.12943     0.10380     0.19355          0.3815
+
+  Total ChiSq/N =     3.9609 from      3.961
+sfresco> 
+  ChiSq/N =     3.961 from      3.961
+  xmgr file written: sr94_dp680_L4j3.5J3.5_pfitR94_dfitR94-fit.plot    
+sfresco> 

@@ -1,0 +1,35 @@
+95Sr(2H,2H)95Sr @ E = 5.378 MeV/u 
+NAMELIST
+ &FRESCO 
+		 hcm=0.1 rmatch=30.0 
+		 hnl=0.1 rnl=3.2 centre=-0.1 nnu=36 jtmax=30
+		 thmin=1.00 thmax=180.00  
+		 iter=1 chans=1 xstabl=1
+		 elab=510.9 /		 
+
+ &PARTITION 
+		namep='95Sr' massp=94.9194 zp=38
+		namet='2H'  masst=2.0141 zt=1 
+		qval=0.000 pwf=F nex=1  
+		/
+	 &STATES 
+			jp=0.5 bandp=1 
+			jt=1.0 bandt=1 
+			cpot = 1 fexch=F /
+ 
+ &partition /
+
+
+	&POT 	kp=1 ap=95 rc=1.300  / INCOMING CHANNEL: 2H + 95SR.. 
+	&POT 	kp=1 type=1 shape=0 p1=130.000 p2=0.970 p3=0.860 p4=0.000 p5=0.000 p5=0.000   / REAL VOLUME [WS]
+	&POT 	kp=1 type=2 shape=0 p1=0.000 p2=0.000 p3=0.000 p4=8.000 p5=1.250 p6=0.771   / IMAG SURFACE [WS]
+	&POT 	kp=1 type=3 shape=0 p1=3.500 p2=0.750 p3=0.500 p4=0.000 p5=0.000 p6=0.000   / SPIN ORBIT [WS] 
+
+ &pot /
+
+ &overlap /
+
+ &coupling /
+
+
+
