@@ -1,7 +1,7 @@
 # FrescoAnalysis
 DWBA Analysis Companion
 
-
+- Simple to use Fresco Manager
 - Uses FRESCO template files and neutron state information to generate a DWBA calculation and fit it to data to extract experimental spectroscopic factors
 - Can also be used to generate elastic scattering files to normalize data to DWBA
 
@@ -32,18 +32,18 @@ DWBA Analysis Companion
   GAM  - Gamma gate used 
   ** these are taken from the Results_*Exc*.root file **
   ExcHi - Upper excitation energy window, see ScanEnergyWindow
-  Verbose : -
- -> 0   =   No Printing 
- -> 1   =   Only High level summary eg. CheckFeeding
- -> 2   =   Standard printing
- -> 3   =   Print everything
+  # Verbose : -
+ - 0   =   No Printing 
+ - 1   =   Only High level summary eg. CheckFeeding
+ - 2   =   Standard printing
+ - 3   =   Print everything
 
 
 # Notes
 
  Further work : -
-   -> Add (d,t) reaction
-   -> Copy files and make directories?
-   -> Speed up the process of doing calculations. Scripts.
+ - Add (d,t) reaction
+ - Copy files and make directories?
+ - Speed up the process of doing calculations. Scripts.
    
  Known bugs :-
