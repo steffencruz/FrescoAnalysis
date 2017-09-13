@@ -93,6 +93,9 @@ class TFrescoAnalysis 	{
 		static TGraphErrors *GetData(){return gdata;}	
 		static TGraph *GetDWBA(){return gcalc;}
    
+    static Double_t Norm(){ return NORM;}
+    static Double_t NormErr(){ return NORM_ERR;}
+        
     static Bool_t CalculateSF(Bool_t usechi2=true, Double_t br=1.0, Double_t br_err=0.0);   
     static TGraph *ChiSquaredGraph(Double_t val=1.0, Double_t dval=0.01, TGraphErrors *gd=NULL, TGraph *gc=NULL);	
     static Double_t ChiSquared(Double_t scale=1.0, TGraphErrors *gd=NULL, TGraph *gc=NULL);
@@ -100,9 +103,9 @@ class TFrescoAnalysis 	{
     		
     static Bool_t SetInfo(UInt_t A, std::string reac="dp", std::string om="PP", 
         Double_t exc=0.0, UInt_t l=0, Double_t jo=-1, Double_t jf=-1,std::string fname="");
-    static Bool_t CheckInfo();   
-
-    static void SetFileNames(std::string fname) { FNAME = fname; }    
+        
+    static Bool_t SetFileName(std::string fname);
+    static std::string GetFileName(){ return FNAME; }
     static void SetVerbose(UInt_t verb) { verbose = verb; }
       
     // use reaction info to make fresco files                			   
@@ -119,25 +122,29 @@ class TFrescoAnalysis 	{
     static Bool_t DoFrescoAnalysis();
 
     // get OM
+    static Double_t GetPotVal(std::string fname);
+    static UInt_t  ReadPotVals(std::string fname); // parse from a file (in case of OM fit)
+    
     static UInt_t  WritePotVals(std::string fname); 
     // set OM
-    static UInt_t  ReadPotVals(std::string fname); // parse from a file (in case of OM fit)
     static UInt_t SetPotVals(UInt_t kbpot=0);
 
-    static void UserSetPotVal(std::string parname, Double_t val);       
-    static void UserSetPotVal(UInt_t kbpot, UInt_t type, UInt_t parnum, Double_t val);   
-
+    static Bool_t UserSetPotVal(std::string parname, Double_t val);       
+    static Bool_t UserSetPotVal(UInt_t kbpot, UInt_t type, UInt_t parnum, Double_t val);   
+    // scan OM
     static TCanvas *UserScanPotVal(std::string parname, Double_t valmin, Double_t valmax, UInt_t nsteps);    
     static TCanvas *UserScanPotVal(UInt_t kbpot, UInt_t kbtype, UInt_t parnum, 
                                   Double_t valmin, Double_t valmax, UInt_t nsteps);
+    static Bool_t UserScanPotVal2D(std::string var1="R0", Double_t val1lo=0.8, Double_t val1hi=1.2, UInt_t ns1=5,   
+                                   std::string var2="RD", Double_t val2lo=1.2, Double_t val2hi=1.6, UInt_t ns2=5);                                  
     
     // control the sfresco fit
     static UInt_t AddFitData(std::string dfile, Double_t thmin=0, Double_t thmax=0);
     static UInt_t GetNFitData(){ return NFITDATA; }             
     
     static Bool_t AddFitPar(UInt_t kind, UInt_t kbpot=1, UInt_t type=1, UInt_t parnum=1, 
-                            Double_t val=-1, Double_t valmin=-1, Double_t valmax=-1);
-    static Bool_t AddFitPar(std::string,Double_t val=-1, Double_t valmin=-1, Double_t valmax=-1);
+                            Double_t val=-1, Double_t valmin=-1, Double_t valmax=-1, Double_t vstep=-1);
+    static Bool_t AddFitPar(std::string,Double_t val=-1, Double_t valmin=-1, Double_t valmax=-1, Double_t vstep=-1);
     static UInt_t GetNFitPars(){ return NFITPARS; }
    
     // get results from root file                         
@@ -153,6 +160,8 @@ class TFrescoAnalysis 	{
     static TList *MakePotentials(Int_t kbpot);
     
   private:
+
+    static Bool_t CheckInfo();   
   
     static Bool_t SetParticles(UInt_t A, Double_t exc, std::string reac);
     static Bool_t SetOM(std::string reac, std::string om);
