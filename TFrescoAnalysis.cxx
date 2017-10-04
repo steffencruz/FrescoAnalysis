@@ -102,14 +102,24 @@ TFrescoAnalysis::TFrescoAnalysis()	{	}
 
 TFrescoAnalysis::~TFrescoAnalysis()	{	}
 
-TList *TFrescoAnalysis::StateSearch(UInt_t A, Double_t exc, std::string dname, std::string om, Bool_t all){
+TList *TFrescoAnalysis::StateSearch(UInt_t A, Double_t exc, std::string dname, std::string om, Bool_t all, std::string fname){
 
   std::vector<int> lo;
   std::vector<double> jo, jf; 
-  
-  UInt_t n = GetAllowedTransfers(A,lo,jo,jf,all);
   TList *list;
   
+  std::string reac;
+  if(dname.find("dp")!=npos){
+    TYPE=0; // IS THIS OKAY????  
+    reac.assign("dp");
+  } else if(dname.find("dt")!=npos){
+    TYPE=4; // IS THIS OKAY????
+    reac.assign("dt");
+  } else 
+    return list;
+  
+  
+  UInt_t n = GetAllowedTransfers(A,lo,jo,jf,all);
   if(!n)
     return list;
     
@@ -124,7 +134,7 @@ TList *TFrescoAnalysis::StateSearch(UInt_t A, Double_t exc, std::string dname, s
   for(int i=0; i<n; i++){
     if(verbose) printf("\n\n * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n\n");
     // make fresco files, locate fit data and root file with gamma and norm info
-    if(!SetInfo(A,"dp",om,exc,lo[i],jo[i],jf[i]) || !AddFitData(dname))
+    if(!SetInfo(A,reac,om,exc,lo[i],jo[i],jf[i],fname) || !AddFitData(dname))
       return list;
       
     // now fit it!!
@@ -139,8 +149,8 @@ TList *TFrescoAnalysis::StateSearch(UInt_t A, Double_t exc, std::string dname, s
     gthry[i] = (TGraph*) fitlist->FindObject(Form("%s_Thry",FNAME.c_str()));
     list->Add(gthry[i]);
 
-    sa.push_back(SF);  
-    sa_err.push_back(SF_ERR);      
+    sa.push_back(SA);  // this was SF before..?!
+    sa_err.push_back(SA_ERR);    // this too   
     sf.push_back(SF);  
     sf_err.push_back(SF_ERR);  
     sig.push_back(CS);
@@ -152,8 +162,7 @@ TList *TFrescoAnalysis::StateSearch(UInt_t A, Double_t exc, std::string dname, s
       chi2_best = CHI2;
     }
   }
-  
-  std::string cname = Form("Sr%i_dp%.0f",A,exc*1e3);
+  std::string cname = Form("Sr%i_%s%.0f",A,REAC.c_str(),exc*1e3);
   std::string ctitle = Form("%iSr(d,p) : %iSr E_{exc} = %.0f keV",A,A+1,exc*1e3);
 
   GetRid(cname.c_str());
@@ -177,7 +186,7 @@ TList *TFrescoAnalysis::StateSearch(UInt_t A, Double_t exc, std::string dname, s
   leg->AddEntry(gdata,"Experimental Data","lp");    
   gdata->Draw("A P");          
   
-  std::string fname_base = Form("StateSearch_Sr%i_dp%.0f",A,exc*1e3);
+  std::string fname_base = Form("StateSearch_Sr%i_%s%.0f",A,REAC.c_str(),exc*1e3);
   TFile *fout = new TFile(Form("%s.root",fname_base.c_str()),"RECREATE");
   gdata->Write();
   
@@ -246,10 +255,14 @@ TList *TFrescoAnalysis::StateSearch(UInt_t A, Double_t exc, std::string dname, s
  // fout->Close();
   
   // use the best fit to set the current status
-  SetInfo(A,"dp",om,exc,lo.at(indx),jo.at(indx),jf.at(indx));
+  SetInfo(A,reac,om,exc,lo.at(indx),jo.at(indx),jf.at(indx));
   SetVerbose(0);  
   AddFitData(dname);
   SetVerbose(2);
+  
+  for(int i=0; i<sa.size(); i++)
+    printf("\n%i. I=%.1f x [ L=%i , j=%.0f/2 ]-> J=%.1f\t SF = %.4f +/- %.4f   Sig(tot) = %.3f +/- %.3f   Chi2 = %.2f",
+    i,BSPIN,lo[i],2*jo[i],jf[i],sf.at(i),sf_err.at(i),sig.at(i),sig_err.at(i),chi2.at(i));
 
   SA = sa.at(indx);
   SA_ERR = sa_err.at(indx);  
@@ -346,8 +359,8 @@ Bool_t TFrescoAnalysis::SetInfo(UInt_t A, std::string reac, std::string om, Doub
       return false;
         
     if(verbose>1) 
-      printf("\n %iSr(%c,%c) : Exc = %.3f MeV,  I=%.1f x [ L=%i , j=%.0f/2 ]-> J=%.1f, OM = '%s'[d]+'%s'[p]: -\n",
-            A,REAC.at(0),REAC.at(1),REXC,BSPIN,L,2*JO,JF,OM1.c_str(),OM2.c_str());  
+      printf("\n %iSr(%c,%c) : Exc = %.3f MeV,  I=%.1f x [ L=%i , j=%.0f/2 ]-> J=%.1f, OM = '%s'[d]+'%s'[%c]: -\n",
+            A,REAC.at(0),REAC.at(1),REXC,BSPIN,L,2*JO,JF,OM1.c_str(),OM2.c_str(),REAC.at(1));  
 
     if(!fname.length())
       FNAME = Form("sr%i_%s%.0f_L%ij%.1fJ%.1f_p%s_d%s",A,reac.c_str(),REXC*1e3,L,JO,JF,OM1.c_str(),OM2.c_str());
@@ -361,7 +374,10 @@ Bool_t TFrescoAnalysis::SetInfo(UInt_t A, std::string reac, std::string om, Doub
       RNAME = Form("Results_%s%.0f.root",REAC.c_str(),REXC*1e3);    
     }
 
-    NBE = RSN - REXC; // neutron binding energy is separation energy minus excitation energy
+    if(TYPE<4)
+      NBE = RSN - REXC; // neutron binding energy is separation energy minus excitation energy
+    else if(TYPE==4)
+      NBE = RSN + REXC; // neutron binding energy is separation energy minus excitation energy
     
   } else {
     
@@ -405,7 +421,7 @@ Bool_t TFrescoAnalysis::MakeFile(std::string file_opt){
   }
   
   if(file_opt.find("frin")!=npos){
-    const char *frin_temp = Form("fresco_%s_template.txt",TYPE==0?"dp":"elastic");
+    const char *frin_temp = Form("fresco_%s_template.txt",TYPE==0||TYPE==4?REAC.c_str():"elastic");
     if(!CreateFile(frin_temp,Form("%s.frin",FNAME.c_str())))
       return false;
   
@@ -435,7 +451,7 @@ Bool_t TFrescoAnalysis::MakeFile(std::string file_opt){
   return true;
 }
 
-TGraph *TFrescoAnalysis::CalculateAngDist(Double_t sf, UInt_t colour, Bool_t sine){
+TGraph *TFrescoAnalysis::CalculateDWBA(Double_t sf, UInt_t colour, Bool_t sine){
 
   TGraph *g;
   if(!MakeFile("frin"))
@@ -444,7 +460,7 @@ TGraph *TFrescoAnalysis::CalculateAngDist(Double_t sf, UInt_t colour, Bool_t sin
   system(Form("%s <  %s.frin  > %s.frout",FREX.c_str(),FNAME.c_str(),FNAME.c_str()));
   
   std::string foutname;
-  if(TYPE==0)
+  if(TYPE==0 || TYPE==4)
     foutname.assign("fort.202");
   else  
    foutname.assign("fort.201");
@@ -481,6 +497,44 @@ TGraph *TFrescoAnalysis::CalculateAngDist(Double_t sf, UInt_t colour, Bool_t sin
   return g;
 }
 
+TGraph *TFrescoAnalysis::CalculateDWBA(std::string frin_name, std::string frout_name, Int_t fortnum, Double_t sf, UInt_t colour, Bool_t sine){
+  
+  TGraph *g;
+  std::string finname = frin_name.substr(0,frin_name.find('.'));
+  system(Form("%s <  %s.frin  > %s.frout",FREX.c_str(),frin_name.c_str(),frout_name.c_str()));
+  
+  std::string foutname = Form("fort.%i",fortnum);
+  std::ifstream calcfile(foutname.c_str());
+  if(!calcfile.is_open()){
+    printf("\n\n\t Error :  Could not locate FRESCO angular distribution file ' %s '.\n\n",foutname.c_str());
+    return g;
+  }
+  
+  g = new TGraph();
+  g->SetNameTitle(finname.c_str(),Form("%s; #theta_{CM} [#circ]; #frac{d#sigma}{d#Omega} [mb/sr]",finname.c_str()));
+  g->SetMarkerColor(colour);
+  g->SetLineColor(colour);
+  
+  std::string line;
+  Double_t theta, sigma, d2r = TMath::DegToRad();
+  Bool_t readvals = false;
+  
+  while (std::getline(calcfile, line)){
+    if(line.find("#  Theta       sigma")!=npos)
+      readvals = true;
+    else if(readvals){
+      std::istringstream ss(line);
+      ss >> std::scientific >> theta >> sigma;
+      if(theta && sigma){
+        sigma*=sf;
+        if(sine) sigma*=sin(theta*d2r);
+        g->SetPoint(g->GetN(),theta,sigma);
+      }
+     }
+  }
+  
+  return g;
+}
 Bool_t TFrescoAnalysis::ExtractFitResult(std::string line){
 
   if(line.find("ChiSq/N")!=npos){
@@ -651,7 +705,7 @@ TList *TFrescoAnalysis::FitData(Bool_t draw, Bool_t write){
   gdata = new TGraphErrors();
   gdata->SetName(Form("%s_ExpData",FNAME.c_str()));
   std::string units, info;
-  if(TYPE==0){
+  if(TYPE==0 || TYPE==4){
     units = "mb/sr";
     info = Form("SF = %.2e +/- %.1e",SF,SF_ERR);
   } else {
@@ -713,9 +767,9 @@ TList *TFrescoAnalysis::FitData(Bool_t draw, Bool_t write){
   } while (std::getline(res_file, line) && line.find("&")==npos);
      
   // calculate SF and SF_ERR
-  if(TYPE==0 && SA && SA_ERR){
+  if((TYPE==0 ||TYPE==4) && SA && SA_ERR){
     // default root file name is the same as AngDist name but with .root
-    int pos1 = DNAME.find("dp"), pos2 = DNAME.find(".");    
+    int pos1 = DNAME.find(Form("%s",TYPE==0?"dp":"dt")), pos2 = DNAME.find(".");    
     std::string rfile = Form("Results_%s.root",DNAME.substr(pos1,pos2-pos1).c_str());      
     // get NORM and GAM from root file    
     ExtractAngDistInfo(rfile);  
@@ -726,7 +780,7 @@ TList *TFrescoAnalysis::FitData(Bool_t draw, Bool_t write){
   if(draw){
     TCanvas *c = new TCanvas("FitData","FitData",800,600);  
    // TLegend *leg = new TLegend(0.6,0.7,0.95,0.9); 
-     if(TYPE==0)
+     if(TYPE==0 || TYPE==4)
        info = Form("SF = %.2e +/- %.1e",SF,SF_ERR);
  
     TLegend *leg = new TLegend(0.6,0.65,0.96,0.9,Form("#chi^{2}/N = %.2f, %s",CHI2,info.c_str()));
@@ -749,7 +803,7 @@ TList *TFrescoAnalysis::FitData(Bool_t draw, Bool_t write){
 
     
   // this should also add in the errors on tigress and normalization if transfer
-  if(TYPE==0 && !ExtractTotalCrossSection("fort.13"))
+  if((TYPE==0 ||TYPE==4) && !ExtractTotalCrossSection("fort.13"))
     return list;   
   
   if(write){
@@ -794,7 +848,6 @@ Bool_t TFrescoAnalysis::CalculateSF(Bool_t usechi2, Double_t br, Double_t br_err
   return true;     
 }
 
-
 Double_t TFrescoAnalysis::GetPotVal(std::string vname){
 
   UInt_t kind, kbpot, kbtype, parnum;
@@ -836,7 +889,7 @@ TCanvas *TFrescoAnalysis::UserScanPotVal(UInt_t kbpot, UInt_t kbtype, UInt_t par
     
     UserSetPotVal(kbpot,kbtype,parnum,val);
     
-    TGraph *g = CalculateAngDist(1);
+    TGraph *g = CalculateDWBA(1);
     if(!g)
       continue;
     g->SetName(Form("PotScan_%s%.0f",parname.c_str(),val));
@@ -925,7 +978,7 @@ Bool_t TFrescoAnalysis::UserScanPotVal2D(std::string var1, Double_t val1lo, Doub
       if(list->GetEntries()!=2)
         return false;
         
-      if(TYPE==0)
+      if(TYPE==0 || TYPE==4)
         info.assign(Form("SF = %.2e+/-%.0e",SF,SF_ERR));
       else
         info.assign(Form("Norm = %.2e+/-%.0e",NORM,NORM_ERR));
@@ -972,7 +1025,6 @@ Bool_t TFrescoAnalysis::UserScanPotVal2D(std::string var1, Double_t val1lo, Doub
   verbose = vtmp;
   return true;
 }
-
 
 Bool_t TFrescoAnalysis::DoFrescoAnalysis(){
 
@@ -1144,7 +1196,7 @@ Bool_t TFrescoAnalysis::SaveResults(std::string rootfile_name, std::string dir){
   
   TLegend *leg = new TLegend(0.5,0.65,0.95,0.9);
   leg->AddEntry(gdata,"Experimental Data","lp"); 
-  if(REAC.find("dp")!=npos)
+  if(REAC.find("dp")!=npos || REAC.find("dt")!=npos)
     leg->AddEntry(gthry,Form("SF = %.3f[%.3f], Chi2 = %.3f",SF,SF_ERR,CHI2),"lp");   
   else 
     leg->AddEntry(gthry,Form("NORM = %.3e[%.3e], Chi2 = %.3f",NORM,NORM_ERR,CHI2),"lp");   
@@ -1333,7 +1385,7 @@ Bool_t TFrescoAnalysis::SetParticles(UInt_t A, Double_t exc, std::string reac){
   if(TYPE==0){ // dp
     RECOA = A+1;
     RMASS = mass[indx+2];
-    QVAL  = qval_dp[indx] - exc;
+    QVAL  = qval_dp[indx];
     RSN   = sn[indx+2];
     TARGA = 2;    
     TMASS = 2.0141;
@@ -1342,8 +1394,12 @@ Bool_t TFrescoAnalysis::SetParticles(UInt_t A, Double_t exc, std::string reac){
   } else if(TYPE==4){ // dt
     RECOA = A-1;
     RMASS = mass[indx];
-    QVAL  = qval_dt[indx] - exc;
-    RSN    = sn[indx];    
+    QVAL  = qval_dt[indx];
+    RSN   = sn[indx+1];    // KATHRIN EXPLAINED THIS 
+    TARGA = 2;    
+    TMASS = 2.0141;
+    TSPIN = 1.0;
+    NKBPOT = 5; // transfer requires 5 potentials       
   } else { // elastic
     RECOA = A;
     RMASS = mass[indx];
@@ -1373,8 +1429,12 @@ Bool_t TFrescoAnalysis::SetOM(std::string reac, std::string om){
     return true;
   }
   
-  if(om=="PP")
-    om.assign("PP1+PP3");
+  if(om=="PP"){
+    if(reac.find("dp")!=npos)
+      om.assign("PP1+PP3");
+    if(reac.find("dt")!=npos)
+      om.assign("PP1+PP5");
+  }
   
   if(reac[0]=='d'){
     if(om.find("PP1")!=npos){
@@ -1416,11 +1476,21 @@ Bool_t TFrescoAnalysis::SetOM(std::string reac, std::string om){
     } else if(om.find("CH")!=npos){
       OM2.assign("CH");        
     } else{
-      printf("\n Error :  Optical model option ' %s ' does not contain a deuteron potential.",om.c_str());
-      printf("\n\t  For deuteron, try : 'PP1' or 'PP2' or 'LH' or 'D'");
+      printf("\n Error :  Optical model option ' %s ' does not contain a proton potential.",om.c_str());
+      printf("\n\t  For proton, try : 'PP3' or 'PP4' or 'BG' or 'CH'");
       return false;  
     }
-  }    
+  } else if(reac[1]=='t'){ // get OM from kathrin thesis
+    if(om.find("PP5")!=npos){
+      OM2.assign("PP5");     
+    } else if(om.find("LLC")!=npos){
+      OM2.assign("LLC");  
+    } else{
+      printf("\n Error :  Optical model option ' %s ' does not contain a triton potential.",om.c_str());
+      printf("\n\t  For triton, try : 'PP5' or other stuff... I don't know");
+      return false;  
+    }
+  }  
   
   OM.assign(om);
   
@@ -1503,8 +1573,54 @@ Bool_t TFrescoAnalysis::SetTransfer(Double_t exc, UInt_t l, Double_t jo, Double_
     // A neutron is more likely to be found in a full orbitals close to the Fermi surface 
     // than mostly empty orbitals in the valence space.
     // The lower orbitals would also be more bound though.
-    printf("\n\n\t Error :  (d,t) is under construction ...\n\n");
-    return false;    
+    printf("\n\n\t Warning :  (d,t) is under construction ...\n\n");
+
+    // for 95Sr(d,p) the total spin is the coupling between the 94Sr core nucleus and the transferred neutron  
+    if(jo>0) JO = jo;
+    if(jf>=0) JF = jf;
+
+    if(BEAMA==95){
+      if(l==0){ // s1/2
+        NO = 3;
+        if(jo<=0) JO = 0.5;
+        if(jf<0) JF = 0;    
+      } else if (l==2 && (jo==1.5 || jo<0)){ // d3/2
+        NO = 2;
+        if(jo<=0) JO = 1.5;
+        if(jf<0) JF = 2;       
+      }  else if (l==2 && jo==2.5){ // d5/2
+        NO = 2;
+        if(jo<=0) JO = 2.5;
+        if(jf<0) JF = 2;       
+      } else if (l==4){ // g9/2
+        NO = 1;
+        if(jo<=0) JO = 4.5;
+        if(jf<0) JF = 4;        
+      } else {
+        printf("\n\t Error :  Could not recognize orbital .. L=%i, jo=%.1f, jf=%.1f\n\n",l,jo,jf);
+        return false;
+      }
+    } 
+      // for 94Sr(d,p) and 96Sr(d,p) the total spin is just the spin of the transferred neutron
+    else if(BEAMA==94 || BEAMA==96){
+      if(l==0){ // s1/2
+        NO = 3;
+        JO = 0.5;
+        JF = 0.5;    
+      } else if (l==2 && (jo==1.5 || jo<=0)){ // d3/2
+        NO = 2;
+        JO = 1.5;
+        JF = 1.5;       
+      }  else if (l==2 && jo==2.5){ // d5/2
+        NO = 2;
+        JO = 2.5;
+        JF = 2.5;       
+      } else if (l==4){ // g9/2
+        NO = 1;
+        JO = 4.5;
+        JF = 4.5;    
+      }
+    }      
   }
   
   return true;
@@ -1516,21 +1632,39 @@ UInt_t TFrescoAnalysis::GetAllowedTransfers(UInt_t A, std::vector<int> &lo, std:
   jo.clear();
   jf.clear();
   
-  if(A==94 || A==96){
-    lo.push_back(0); jo.push_back(0.5); jf.push_back(0.5);
-    lo.push_back(2); jo.push_back(1.5); jf.push_back(1.5);
-    lo.push_back(2); jo.push_back(2.5); jf.push_back(2.5);
-    lo.push_back(4); jo.push_back(3.5); jf.push_back(3.5);         
-  } else if(A==95){
-    lo.push_back(0); jo.push_back(0.5); jf.push_back(0.0);
-    if(all){lo.push_back(2); jo.push_back(1.5); jf.push_back(1.0);}
-    lo.push_back(2); jo.push_back(1.5); jf.push_back(2.0);
-    if(all){lo.push_back(2); jo.push_back(2.5); jf.push_back(2.0);}
-    lo.push_back(2); jo.push_back(2.5); jf.push_back(3.0);
-    if(all){lo.push_back(4); jo.push_back(3.5); jf.push_back(3.0);}      
-    lo.push_back(4); jo.push_back(3.5); jf.push_back(4.0);         
-  } else 
-    printf("\n\n\t Error :  A = %i is invalid. A must be 94, 95 or 96.\n\n",A);
+  if(TYPE==0){
+    if(A==94 || A==96){
+      lo.push_back(0); jo.push_back(0.5); jf.push_back(0.5);
+      lo.push_back(2); jo.push_back(1.5); jf.push_back(1.5);
+      lo.push_back(2); jo.push_back(2.5); jf.push_back(2.5);
+      lo.push_back(4); jo.push_back(3.5); jf.push_back(3.5);         
+    } else if(A==95){
+      lo.push_back(0); jo.push_back(0.5); jf.push_back(0.0);
+      if(all){lo.push_back(2); jo.push_back(1.5); jf.push_back(1.0);}
+      lo.push_back(2); jo.push_back(1.5); jf.push_back(2.0);
+      if(all){lo.push_back(2); jo.push_back(2.5); jf.push_back(2.0);}
+      lo.push_back(2); jo.push_back(2.5); jf.push_back(3.0);
+      if(all){lo.push_back(4); jo.push_back(3.5); jf.push_back(3.0);}      
+      lo.push_back(4); jo.push_back(3.5); jf.push_back(4.0);         
+    } else 
+      printf("\n\n\t Error :  A = %i is invalid. A must be 94, 95 or 96.\n\n",A);
+  } else if(TYPE==4){
+    if(A==94 || A==96){
+      lo.push_back(0); jo.push_back(0.5); jf.push_back(0.5);
+      lo.push_back(2); jo.push_back(1.5); jf.push_back(1.5);
+      lo.push_back(2); jo.push_back(2.5); jf.push_back(2.5);
+      lo.push_back(4); jo.push_back(4.5); jf.push_back(4.5);         
+    } else if(A==95){
+      lo.push_back(0); jo.push_back(0.5); jf.push_back(0.0);
+      if(all){lo.push_back(2); jo.push_back(1.5); jf.push_back(1.0);}
+      lo.push_back(2); jo.push_back(1.5); jf.push_back(2.0);
+      if(all){lo.push_back(2); jo.push_back(2.5); jf.push_back(2.0);}
+      lo.push_back(2); jo.push_back(2.5); jf.push_back(3.0);
+      lo.push_back(4); jo.push_back(4.5); jf.push_back(4.0);         
+      if(all){lo.push_back(4); jo.push_back(4.5); jf.push_back(5.0);}           
+    } else 
+      printf("\n\n\t Error :  A = %i is invalid. A must be 94, 95 or 96.\n\n",A);
+  }  
   
   return (UInt_t)lo.size();
 }
@@ -1600,12 +1734,12 @@ UInt_t TFrescoAnalysis::WritePotVals(std::string fname){
 
 UInt_t TFrescoAnalysis::SetPotVals(UInt_t kbpot){
   
-// calculate OM
+// calculate OM : example for 95Sr(d,p) or 95Sr(d,t)
 // pot #1 : detueron + 95Sr
-// pot #2 : proton   + 96Sr
-// pot #3 : neutron  + 95Sr    *FIXED*
-// pot #4 : proton   + neutron *FIXED*
-// pot #5 : proton   + 95Sr
+// pot #2 : proton   + 96Sr             or  triton     + 94Sr
+// pot #3 : neutron  + 95Sr    *FIXED*  or  neutron    + 94Sr    *FIXED*
+// pot #4 : proton   + neutron *FIXED*  or  deuteron   + neutron *FIXED*
+// pot #5 : proton   + 95Sr             or  deuteron   + 95Sr
   
   std::string namebase, name;
   UInt_t pmin=1, pmax=5, kbtype, pn, n=0;
@@ -1613,7 +1747,7 @@ UInt_t TFrescoAnalysis::SetPotVals(UInt_t kbpot){
     pmin=kbpot;
     pmax=kbpot;
   }
-  if(REAC.find("dp")==npos){ // if elastic only get first potential
+  if(REAC.find("pp")!=npos || REAC.find("dd")!=npos){ // if elastic only get first potential
     pmin=1;
     pmax=1;    
   }
@@ -1626,7 +1760,7 @@ UInt_t TFrescoAnalysis::SetPotVals(UInt_t kbpot){
       par[i]=0.0;
 
     // if (d,d) or (d,p) potential1
-    if(TYPE==0 || (TYPE==2 && pot==1)){ // deut + 95Sr
+    if(TYPE==2 || (TYPE==0 && pot==1) || (TYPE==4 && (pot==1 || pot==5))){ // deut + 95Sr
     
       if(OM1.find("PP1")!=npos){       
         // kbtype = 0 [coulomb]
@@ -1669,7 +1803,7 @@ UInt_t TFrescoAnalysis::SetPotVals(UInt_t kbpot){
       }
     }
     // if (p,p) or (d,p) potential 2 or 5
-    if(TYPE==1 || ((pot==2 || pot==5) && TYPE==0)){   // prot + 95Sr
+    if(TYPE==1 || (TYPE==0 && (pot==2 || pot==5))){   // prot + 95Sr
   
       if(OM2.find("PP3")!=npos){       
         // kbtype = 0 [coulomb]
@@ -1713,6 +1847,32 @@ UInt_t TFrescoAnalysis::SetPotVals(UInt_t kbpot){
         return n;
       }
     }
+
+    if(TYPE==4 && pot==2){ // trit + 95Sr
+      if(OM2.find("PP5")!=npos){       
+        // kbtype = 0 [coulomb]
+        par[0] = 1.30   ;
+        // kbtype = 1 [volume WS]
+        par[1] = 164.0 ; par[2] = 1.20	  ; par[3] = 0.72	  ;     
+        par[4] = 19.0 ;  par[5] = 1.40	  ; par[6] = 0.84	  ;   
+        // kbtype = 3 [Spin Orbit]
+        par[13] = 2.5   ; par[14] = 1.20	; par[15] = 0.72  ;
+      } else if(OM2.find("LLC")!=npos){       
+        // kbtype = 0 [coulomb]
+        par[0] = 1.422   ;
+        // kbtype = 1 [volume WS]
+        par[1] = 177.075 ; par[2] = 1.087	  ; par[3] = 0.77	  ;     
+        par[4] = 12.965  ;  par[5] = 1.281  ; par[6] = 1.206  ;   
+        // kbtype = 2 [surface WS]               
+        par[10] = 17.214 ; par[11] = 1.15	  ; par[12] = 0.864 ;        
+        // kbtype = 3 [Spin Orbit]
+        par[13] = 1.903  ; par[14] = 0.498  ; par[15] = 0.116 ;
+      } 
+      else{
+        printf("\n\t Error :  optical model ' %s ' not found.\n\n",OM2.c_str());
+        return n;
+      }
+    }    
 
     kbtype=0;
     pn=0;
@@ -1931,7 +2091,7 @@ UInt_t TFrescoAnalysis::AddFitData(std::string dfile, Double_t thmin, Double_t t
   gdata = new TGraphErrors();
   gdata->SetName(Form("%s_ExpData",FNAME.c_str()));
   std::string units;
-  if(TYPE==0)
+  if(TYPE==0 || TYPE==4)
     units = "mb/sr";
   else   
     units = "Ratio to Rutherford";
@@ -2081,10 +2241,10 @@ UInt_t TFrescoAnalysis::BuildReplacementStrings(){
   HOLDERNAME.push_back("<NFITDATA>");   HOLDERVAL.push_back(Form("%i",NFITDATA));    
   HOLDERNAME.push_back("<FITDATA>");    HOLDERVAL.push_back("");   
       
-  if(TYPE==0)
+  if(TYPE==0 || TYPE==4)
     AddFitPar(2); // spectroscopic factor fit
   else 
-    AddFitPar(5); // excptnorm fit
+    AddFitPar(5); // exptnorm fit
 
   if(verbose==3){
     printf("\n\n Built wildcard vocabulary with %i strings : -\n",(int)HOLDERNAME.size());
@@ -2381,9 +2541,10 @@ void TFrescoAnalysis::Print(Option_t *opt){
   printf("\n Reaction :  %iSr(%c,%c)%iSr @ %.3f MeV/u [beame = %.1f MeV]",
     BEAMA,REAC.at(0),REAC.at(1),RECOA,EPERU,ELAB);
   
-  if(TYPE==0)
-    printf("\n\n   %iSr   :  Exc = %.3f MeV,  I=%.1f x [ L=%i , j=%.0f/2 ]-> J=%.1f, OM = '%s'[p]+'%s'[d]: -\n",
-            RECOA,REXC,BSPIN,L,2*JO,JF,OM2.c_str(),OM1.c_str()); 
+  if(TYPE==0 || TYPE==4){
+    printf("\n\n   %iSr   :  Exc = %.3f MeV,  I=%.1f x [ L=%i , j=%.0f/2 ]-> J=%.1f, OM = '%s'[%c]+'%s'[d]: -\n",
+            RECOA,REXC,BSPIN,L,2*JO,JF,OM2.c_str(),REAC.at(1),OM1.c_str()); 
+  }
             
   if(strcmp(opt,"all")==0)
     for(int i=0; i<HOLDERNAME.size(); i++)

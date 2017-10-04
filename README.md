@@ -5,7 +5,9 @@ DWBA Analysis Companion
 - Uses FRESCO template files and neutron state information to generate a DWBA calculation and fit it to data to extract experimental spectroscopic factors
 - Can also be used to generate elastic scattering files to normalize data to DWBA
 
-  
+# Calculate Mode
+
+- Calculates DWBA angular distributions by generating an input file from basic user input, or from existing .frin file
   
 # Search Mode
 
@@ -17,7 +19,7 @@ DWBA Analysis Companion
 
 # Description of variables
 
-- REAC - "dp", "pp", "dd" selects the reaction
+- REAC - "dp", "dt", "pp", "dd" selects the reaction
 
 ** neutron state information **  
 - EXC - Excitation energy [MeV]
@@ -46,8 +48,5 @@ DWBA Analysis Companion
 # Notes
 
 Further work : -
-- Add (d,t) reaction
-- Copy files and make directories?
-- Speed up the process of doing calculations. Scripts.
    
 Known bugs :-

@@ -111,11 +111,14 @@ class TFrescoAnalysis 	{
     // use reaction info to make fresco files                			   
     static Bool_t MakeFile(std::string file_opt = "frin+search+min");
     
-    static TGraph *CalculateAngDist(Double_t sf=1.0, UInt_t colour=1, Bool_t sine=false);
+    static TGraph *CalculateDWBA(Double_t sf=1.0, UInt_t colour=1, Bool_t sine=false);
+    static TGraph *CalculateDWBA(std::string frin_name, std::string frout_name, Int_t fortnum=202, 
+                                 Double_t sf=1.0, UInt_t colour=1, Bool_t sine=false);
+    
     static TList *FitData(Bool_t draw=true, Bool_t write=false);
     
 //    static Bool_t TestOpticalModels();
-    static TList *StateSearch(UInt_t A, Double_t exc, std::string dname, std::string om="PP",Bool_t all=false);
+    static TList *StateSearch(UInt_t A, Double_t exc, std::string dname, std::string om="PP",Bool_t all=false, std::string fname="");
 
     static Bool_t SaveResults(std::string rootfile_name, std::string dir);
     
