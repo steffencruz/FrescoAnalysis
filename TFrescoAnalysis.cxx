@@ -451,6 +451,34 @@ Bool_t TFrescoAnalysis::MakeFile(std::string file_opt){
   return true;
 }
 
+Bool_t TFrescoAnalysis::CheckOutput(std::string fname, std::string flag){
+
+  std::ifstream infile(fname.c_str());
+  
+  std::string line;
+  Bool_t success = true;
+  Int_t n=0;
+  
+  while(std::getline(infile,line)){
+   
+    if(line.find("ERROR")!=npos) // found the word 'ERROR' on this line
+      success = false;
+    if(line.find("WARNING")!=npos) // found the word 'WARNING' on this line
+      success = false;   
+    if(line.find("DISCREPANCY")!=npos) // found the word 'DISCREPANCY' on this line
+      success = false;        
+
+    if(!success){
+      printf("\n\t Error reading ' %s ' on line %i ... %s\n",fname.c_str(),n,line.c_str());
+      return false;
+    }
+    n++;      
+  }
+  
+  infile.close();
+  return success;
+}
+
 TGraph *TFrescoAnalysis::CalculateDWBA(Double_t sf, UInt_t colour, Bool_t sine){
 
   TGraph *g;
@@ -458,6 +486,9 @@ TGraph *TFrescoAnalysis::CalculateDWBA(Double_t sf, UInt_t colour, Bool_t sine){
     return g; 
     
   system(Form("%s <  %s.frin  > %s.frout",FREX.c_str(),FNAME.c_str(),FNAME.c_str()));
+  
+  if(!CheckOutput(Form("%s.frout",FNAME.c_str())))
+    return g;
   
   std::string foutname;
   if(TYPE==0 || TYPE==4)

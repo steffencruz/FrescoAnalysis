@@ -161,6 +161,7 @@ class TFrescoAnalysis 	{
            std::vector<double> &jf, Bool_t all=true);
 
     static TList *MakePotentials(Int_t kbpot);
+    static Bool_t CheckOutput(std::string fname, std::string flag="");
     
   private:
 
